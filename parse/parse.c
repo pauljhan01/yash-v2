@@ -17,7 +17,7 @@ void tokenize(char * command){
             token = strtok_r(NULL, " ", &saveptr);
             num_tokens++;
         }
-}
+} 
 
 command_t parseCommands(){
 
