@@ -17,7 +17,9 @@ void tokenize(char * command){
             token = strtok_r(NULL, " ", &saveptr);
             num_tokens++;
         }
-} 
+}
+
+#define FILENAME_STRING(x) (x-1)
 
 command_t parseCommands(){
 
@@ -41,18 +43,29 @@ command_t parseCommands(){
         if(strcmp(tokens[i],">")==0){
             command.redirect_idx[i] = i;
             command.redirect_type[i] = STDOUT_FILENO;
+            i++;
+            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
+            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
         }
 
         if(strcmp(tokens[i],"<")==0){
             command.redirect_idx[i] = i;
             command.redirect_type[i] = STDIN_FILENO;
+            i++;
+            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
+            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
         }
 
         if(strcmp(tokens[i],"2>")==0){
             command.redirect_idx[i] = i;
             command.redirect_type[i] = STDERR_FILENO;
+            i++;
+            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
+            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
         }
     } 
+
+    return command;
 }
 
 int getNumTokens(){
