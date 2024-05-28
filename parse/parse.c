@@ -27,15 +27,36 @@ command_t parseCommands(){
     int i = 0;
     int x = 0; //command idx
     int y = 0; //exec and flags idx
-    for(i = 0; strcmp(tokens[i],"|")!=0; i++){
+
+    for(i = 0; strcmp(tokens[i],"|")!=0 || i < num_tokens; i++){
         if(strcmp(tokens[i],"fg")!=0 && strcmp(tokens[i],"bg")!=0 && strcmp(tokens[i],"jobs")!=0){
             strcpy(command.exec_and_flags[x][y],tokens[i]);
             y++;
         }
     }
+
     for(int z = 0; z < y; z++){
         printf("%s\n", command.exec_and_flags[x][z]);
     }
+
+    //skip over pipe
+    i++;
+    //increase index for second command
+    x++;
+    //reset index for command and flag string array
+    y=0;
+
+    for(; i < num_tokens; i++){
+        if(strcmp(tokens[i],"fg")!=0 && strcmp(tokens[i],"bg")!=0 && strcmp(tokens[i],"jobs")!=0){
+            strcpy(command.exec_and_flags[x][y],tokens[i]);
+            y++;
+        }
+    }
+
+    for(int z = 0; z < y; z++){
+        printf("%s\n", command.exec_and_flags[x][z]);
+    }
+
 
     return command;
 }
