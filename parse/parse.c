@@ -28,7 +28,10 @@ command_t parseCommands(){
     int x = 0; //command idx
     int y = 0; //exec and flags idx
 
-    for(i = 0; strcmp(tokens[i],"|")!=0 || i < num_tokens; i++){
+    for(i = 0; i < num_tokens; i++){
+        if(strcmp(tokens[i],"|")==0){
+            break;
+        }
         if(strcmp(tokens[i],"fg")!=0 && strcmp(tokens[i],"bg")!=0 && strcmp(tokens[i],"jobs")!=0){
             strcpy(command.exec_and_flags[x][y],tokens[i]);
             y++;
@@ -37,6 +40,10 @@ command_t parseCommands(){
 
     for(int z = 0; z < y; z++){
         printf("%s\n", command.exec_and_flags[x][z]);
+    }
+
+    if(i+1 == num_tokens){
+        return command;
     }
 
     //skip over pipe
