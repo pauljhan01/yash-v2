@@ -19,51 +19,23 @@ void tokenize(char * command){
         }
 }
 
-#define FILENAME_STRING(x) (x-1)
-
 command_t parseCommands(){
 
-    command_t command = {
-        0, 
-        false,
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        false,
-    };
+    command_t command;
 
-    for(int i = 0; i < num_tokens; i++){
-        if(strcmp(tokens[i],"|")==0){
-            command.pipe = i;
+    bool pipe = false;
+    int i = 0;
+    int x = 0; //command idx
+    int y = 0; //exec and flags idx
+    for(i = 0; strcmp(tokens[i],"|")!=0; i++){
+        if(strcmp(tokens[i],"fg")!=0 && strcmp(tokens[i],"bg")!=0 && strcmp(tokens[i],"jobs")!=0){
+            strcpy(command.exec_and_flags[x][y],tokens[i]);
+            y++;
         }
-
-        if(strcmp(tokens[i],">")==0 || strcmp(tokens[i],"<")==0 || strcmp(tokens[i],"2>")==0){
-            command.redirect = true;
-        }
-
-        if(strcmp(tokens[i],">")==0){
-            command.redirect_idx[i] = i;
-            command.redirect_type[i] = STDOUT_FILENO;
-            i++;
-            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
-            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
-        }
-
-        if(strcmp(tokens[i],"<")==0){
-            command.redirect_idx[i] = i;
-            command.redirect_type[i] = STDIN_FILENO;
-            i++;
-            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
-            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
-        }
-
-        if(strcmp(tokens[i],"2>")==0){
-            command.redirect_idx[i] = i;
-            command.redirect_type[i] = STDERR_FILENO;
-            i++;
-            command.file_name[i-1] = (char *)malloc(strlen(tokens[i])*sizeof(char));
-            strcpy(command.file_name[FILENAME_STRING(i)],tokens[i]);
-        }
-    } 
+    }
+    for(int z = 0; z < y; z++){
+        printf("%s\n", command.exec_and_flags[x][z]);
+    }
 
     return command;
 }
